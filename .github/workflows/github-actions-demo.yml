@@ -4,13 +4,23 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 jobs:
   check-bats-version:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: './scripts' # a default working directory for run commands
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: npm install -g bats
-      - run: bats -v
+      
+      # run scripts and shell commands
+      - name: Run a script
+        run: './my-script.sh' # './scripts' => './scripts/my-script.sh'
+
+        env:
+          POSTGRES_HOST: postgres
+          POSTGRES_PORT: 5432
