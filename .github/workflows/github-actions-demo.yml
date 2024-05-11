@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  # can 
+  # can be manual triggered in Actions panel
   workflow_dispatch:
 jobs:
   check-bats-version:
