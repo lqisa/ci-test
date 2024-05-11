@@ -10,12 +10,14 @@ env:
   continue: true
   # Expression
   CUR_BRANCH: ${{ github.ref == 'refs/heads/main' && 'value_for_main_branch' || 'value_for_other_branches' }}
+  RUNS_ON: ubuntu-latest
+  WORKING-DIRECTORY: "./scripts"
 jobs:
   run-scripts-and-shell-commands:
-    runs-on: ubuntu-latest
+    runs-on: ${{ env.RUNS_ON }}
     defaults:
       run:
-        working-directory: "./scripts" # a default working directory for run commands
+        working-directory: ${{ env.WORKING-DIRECTORY }} # a default working directory for run commands
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -39,17 +41,40 @@ jobs:
       - name: Run the script
         run: "./my-script.sh" # './scripts' => './scripts/my-script.sh'
 
+      - name: Expressions
+        run: echo $CUR_BRANCH
+
+  build-lib:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ${{ env.RUNS_ON }}
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING-DIRECTORY }} # a default working directory for run commands
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
       - name: Build
-        if: ${{ github.ref == 'refs/heads/main' }}
         run: node 'build.js'
       - name: Upload output file
         uses: actions/upload-artifact@v4
         with:
           name: output-files
           path: dist/
-
-      - name: Expressions
-        run: echo $CUR_BRANCH
+  
+  publish-to-npm:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ${{ env.RUNS_ON }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: publish
+        run: npm run publish
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   download-artifacts-from-last-job:
     if: ${{ github.ref == 'refs/heads/main' }}
