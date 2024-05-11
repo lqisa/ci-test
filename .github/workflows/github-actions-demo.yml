@@ -53,4 +53,4 @@ jobs:
         with:
           name: output-files
       - name: run the artifact(js)
-        run: node dist/lib.js
+        run: node output-files/lib.js
