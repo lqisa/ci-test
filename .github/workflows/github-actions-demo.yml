@@ -18,7 +18,12 @@ jobs:
           node-version: '20'
       
       # run scripts and shell commands
-      - name: Run a script
+      - name: Run a script with interpreter
+        run: bash './my-script.sh' # './scripts' => './scripts/my-script.sh'
+
+      - name: Make the script files executable
+        run: chmod+x my-script.sh
+      - name: Run the script
         run: './my-script.sh' # './scripts' => './scripts/my-script.sh'
 
         env:
