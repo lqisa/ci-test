@@ -8,7 +8,8 @@ on:
   workflow_dispatch:
 env:
   continue: true
-  MY_ENV_VAR: ${{ github.ref == 'refs/heads/main' && 'value_for_main_branch' || 'value_for_other_branches' }}
+  # Expression
+  CUR_BRANCH: ${{ github.ref == 'refs/heads/main' && 'value_for_main_branch' || 'value_for_other_branches' }}
 jobs:
   run-scripts-and-shell-commands:
     runs-on: ubuntu-latest
@@ -24,7 +25,7 @@ jobs:
       # run scripts and shell commands
       - name: Run a script (not executable) without interpreter
         run: "./my-script.sh" # './scripts' => './scripts/my-script.sh'
-        continue-on-error: ${{ fromJSON(env.continue) }}
+        continue-on-error: ${{ fromJSON(env.continue) }} # fromJSON() function to convert the environment variable continue from a string to a boolean
 
       - name: Run a script with interpreter
         run: bash './my-script.sh' # './scripts' => './scripts/my-script.sh'
@@ -39,6 +40,7 @@ jobs:
         run: "./my-script.sh" # './scripts' => './scripts/my-script.sh'
 
       - name: Build
+        if: ${{ github.ref == 'refs/heads/main' }}
         run: node 'build.js'
       - name: Upload output file
         uses: actions/upload-artifact@v4
@@ -47,9 +49,10 @@ jobs:
           path: dist/
 
       - name: Expressions
-        run: echo $MY_ENV_VAR
+        run: echo $CUR_BRANCH
 
   download-artifacts-from-last-job:
+    if: ${{ github.ref == 'refs/heads/main' }}
     needs: run-scripts-and-shell-commands
     runs-on: ubuntu-latest
     steps:
