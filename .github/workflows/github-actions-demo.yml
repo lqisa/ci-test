@@ -14,7 +14,7 @@ env:
   WORKING-DIRECTORY: "./scripts"
 jobs:
   run-scripts-and-shell-commands:
-    runs-on: ${{ env.RUNS_ON }}
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ${{ env.WORKING-DIRECTORY }} # a default working directory for run commands
@@ -46,7 +46,7 @@ jobs:
 
   build-lib:
     if: ${{ github.ref == 'refs/heads/main' }}
-    runs-on: ${{ env.RUNS_ON }}
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ${{ env.WORKING-DIRECTORY }} # a default working directory for run commands
@@ -62,7 +62,7 @@ jobs:
         with:
           name: output-files
           path: dist/
-  
+
   publish-to-npm:
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ${{ env.RUNS_ON }}
