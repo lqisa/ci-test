@@ -6,6 +6,7 @@
   "repository": {
     "url": "https://github.com/lqisa/ci-test"
   },
+  "files": ["/dist"],
   "scripts": {
     "build": "echo \"building...\" && node scripts/build.js && exit 1"
   },
