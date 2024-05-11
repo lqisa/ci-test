@@ -6,6 +6,9 @@
   "scripts": {
     "build": "echo \"building...\" && node scripts/build.js && exit 1"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC"
