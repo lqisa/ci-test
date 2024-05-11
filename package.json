@@ -1,12 +1,14 @@
 {
   "name": "@lqisa/ci-test",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "repository": {
     "url": "https://github.com/lqisa/ci-test"
   },
-  "files": ["/dist"],
+  "files": [
+    "/dist"
+  ],
   "scripts": {
     "build": "echo \"building...\" && node scripts/build.js && exit 1"
   },
