@@ -1,0 +1,1 @@
+console.log('this is output file of building');

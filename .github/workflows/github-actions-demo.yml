@@ -7,7 +7,7 @@ on:
   # can be manual triggered in Actions panel
   workflow_dispatch:
 jobs:
-  check-bats-version:
+  run-scripts-and-shell-commands:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -35,4 +35,20 @@ jobs:
       - name: Run the script
         run: './my-script.sh' # './scripts' => './scripts/my-script.sh'
 
-        
+      - name: Build
+        run: node './scripts/build.js'
+      - name: Upload output file
+        uses: actions/upload-artifact@v4
+        with:
+          name: output-files
+          path: dist/
+
+  download-artifacts-from-last-job:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+      - name: Download a single artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: output-files
+          # needs: run-scripts-and-shell-commands
