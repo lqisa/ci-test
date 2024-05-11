@@ -1,31 +1,34 @@
 name: learn-github-actions
 #run-name: ${{ github.actor }} is learning GitHub Actions
-on: 
+on:
   push:
     branches:
       - main
   # can be manual triggered in Actions panel
   workflow_dispatch:
+env:
+  continue: true
+  MY_ENV_VAR: ${{ github.ref == 'refs/heads/main' && 'value_for_main_branch' || 'value_for_other_branches' }}
 jobs:
   run-scripts-and-shell-commands:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: './scripts' # a default working directory for run commands
+        working-directory: "./scripts" # a default working directory for run commands
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-      
+          node-version: "20"
+
       # run scripts and shell commands
       - name: Run a script (not executable) without interpreter
-        run: './my-script.sh' # './scripts' => './scripts/my-script.sh'
-        continue-on-error: true
+        run: "./my-script.sh" # './scripts' => './scripts/my-script.sh'
+        continue-on-error: ${{ fromJSON(env.continue) }}
 
       - name: Run a script with interpreter
         run: bash './my-script.sh' # './scripts' => './scripts/my-script.sh'
-      # using variables
+        # using variables
         env:
           POSTGRES_HOST: postgres
           POSTGRES_PORT: 5432
@@ -33,7 +36,7 @@ jobs:
       - name: Make the script files executable
         run: chmod +x my-script.sh
       - name: Run the script
-        run: './my-script.sh' # './scripts' => './scripts/my-script.sh'
+        run: "./my-script.sh" # './scripts' => './scripts/my-script.sh'
 
       - name: Build
         run: node 'build.js'
@@ -42,6 +45,9 @@ jobs:
         with:
           name: output-files
           path: dist/
+
+      - name: Expressions
+        run: echo $MY_ENV_VAR
 
   download-artifacts-from-last-job:
     needs: run-scripts-and-shell-commands
