@@ -52,6 +52,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: output-files
-      - run: ls -al
+      # - run: ls -al
       - name: run the artifact(js)
-        run: node output-files/lib.js
+        run: node lib.js
