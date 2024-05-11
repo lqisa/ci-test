@@ -65,6 +65,7 @@ jobs:
 
   publish-to-npm:
     if: ${{ github.ref == 'refs/heads/main' }}
+    needs: build-lib
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -72,13 +73,13 @@ jobs:
         with:
           node-version: "20"
       - name: publish
-        run: npm run publish
+        run: npm publish
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   download-artifacts-from-last-job:
     if: ${{ github.ref == 'refs/heads/main' }}
-    needs: run-scripts-and-shell-commands
+    needs: build-lib
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-node@v4
