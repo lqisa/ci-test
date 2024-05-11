@@ -51,4 +51,4 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: output-files
-          # needs: run-scripts-and-shell-commands
+          needs: run-scripts-and-shell-commands
