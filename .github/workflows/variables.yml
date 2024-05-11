@@ -1,0 +1,23 @@
+#You can define variables that are scoped for:
+
+# - The entire workflow, by using env at the top level of the workflow file.
+# - The contents of a job within a workflow, by using jobs.<job_id>.env.
+# - A specific step within a job, by using jobs.<job_id>.steps[*].env.
+
+name: Greeting on variable day
+
+on: workflow_dispatch
+
+env:
+  DAY_OF_WEEK: Monday
+
+jobs:
+  greeting_job:
+    runs-on: ubuntu-latest
+    env:
+      Greeting: Hello
+    steps:
+      - name: "Say Hello Mona it's Monday"
+        run: echo "$Greeting $First_Name. Today is $DAY_OF_WEEK!"
+        env:
+          First_Name: Mona
